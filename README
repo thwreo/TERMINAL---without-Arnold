@@ -1,0 +1,47 @@
+FILE.H
+- contine cele doua structuri, "Directory" si "File";
+	struct Directory: ~pointer la o variabila de tip char; reprezinta numele structurii de tip "Directory" (current_directory)
+			  ~pointer la inceputul unei liste de structuri de tip "Directory" (directoarele pe care le contine current_directory)
+                          ~pointer la inceputul unei liste de structuri de tip "File" (fisierele pe care le contine current_directory)
+                          ~pointer la o structura de tip "Directory"; reprezinta structura directorului parinte (a lui current_directory)
+	
+	struct File:	  ~pointer la o variabila de tip char; reprezinta numele structurii de tip "File" (un fisier)
+			  ~varabila de tip int; reprezinta dimensiunea fisierului  =strlen(data)=
+			  ~pointer la o variabila de tip char; reprezinta informatia continuta de fisier 
+			  ~pointer la o structura de tip "Directory"; reprezinta directorul in care se afla fisierul
+
+LIST.H
+- contine cele doua liste de structuri, "Dir_list" si "File_list";
+	struct Dir_list:   ~pointer la structura curenta de tip "Directory"
+			   ~pointer la urmatoarea structura de tip "Directory" din lista
+
+	struct File_list:  ~pointer la structura curenta de tip "File"
+  			   ~pointer la urmatoarea structura de tip "File" din lista
+
+FILE.C
+- contine functiile:
+	create_fs - creeaza sistemul de fisiere (directorul "root_directory", de tipul "Directory")
+		  - initializeaza toate componentele structurii cu "NULL", cu exceptia numelui ( "/" pentru root)
+                  - returneaza structura creata
+	
+	delete_fs - atribuie tuturor componentelor structurii "NULL" (doar pentru root)
+	
+	pwd       - afiseaza calea parcursa de la root pana la directorul curent (se foloseste de pointer-ul catre directorul parinte, continut de structura directorului curent)
+
+LIST.C
+- contine functiile:
+	tab       - genereaza un anumit numar de spatii; se apeleaza in functia "tree"
+
+	touch     - adauga in lista de fisiere a directorului curent, in ordine lexicografica, fisierul cu numele "filename" si continutul "content", parametri trimisi ca argumente functiei 
+
+	mkdir     - adauga in lista de directoare a directorului curent, in ordine lexicografica, directorul cu numele "new_dir_name"
+	
+	ls	  - afiseaza intreaga lista de fisiere, apoi intreaga lista de directoare (numele structurilor din listele respective)
+	tree      - afiseaza (recursiv) initial numele componentelor din lista de fisiere, ulterior numele componentelor din lista de directoare (pentru directorul curent); pana sa se afiseze numele structurii de tip "Directory" din lista, se reapeleaza functia pentru a afisa numele componentelor unei structuri din lista de directoare (si tot asa); pentru primul nivel de directoare, avem adancime 1; pentru directoarele din primul nivel de directoare avem adancime 2 etc..
+	rm        - elimina din lista de fisiere a directorului curent fisierul cu numele "filename"
+	rmdir     - elimina din lista de directoare a directorului curent directorul cu numele "dir_name" (implementarea acestei functii s-a facut fara a elimina recursiv toate componentele structurii de tip "Directory" pe care vrem sa o eliminam din lista --momentan)
+
+MAIN.C
+- se foloseste de structurile definite in fisierele "file.h" si "list.h", de functiile definite in fisierele "file.c" si "list.c"
+- "genereaza" o consola interactiva, care se opreste la intalnirea comenzii "delete fs"
+- se citeste de la tastatura o comanda ("command"); in functie de tipul comenzii, se apeleaza diferitele functii; 
